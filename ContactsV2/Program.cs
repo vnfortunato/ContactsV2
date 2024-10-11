@@ -31,7 +31,7 @@ switch (sceltaInt)
             var cognome = Console.ReadLine();
             Console.Write("Inserisci email: ");
             var email = Console.ReadLine();
-            Console.Write("Inserisci telefono: ");
+            Console.Write("Inserisci numero di telefono: ");
             var telefono = Console.ReadLine();
             string[] Array2 = { nome, cognome, email, telefono + "\n"};
             string Array3 = string.Join(separator, Array2);
@@ -40,19 +40,37 @@ switch (sceltaInt)
     case 2:
         Console.Write("Inserisci email contatto da modificare: ");
         var emailSearch = Console.ReadLine();
+        using (StreamReader sr = new StreamReader(folderPath))
+        {
+            var fileSearch = sr.ReadToEnd();
+            bool fileSearchBool = fileSearch.Contains(emailSearch);
+            while (fileSearchBool == false)
+            {
+                Console.WriteLine("Email non trovata");
+                Console.Write("Inserisci email contatto da modificare: ");
+                emailSearch = Console.ReadLine();
+                if (fileSearch.Contains(emailSearch))
+                {
+                    break;
+                }
+                }
+            }
+        Console.Write("Inserisci nuovo nome: ");
         var newName = Console.ReadLine();
+        Console.Write("Inserisci nuovo cognome: ");
         var newSurname = Console.ReadLine();
+        Console.Write("Inserisci nuova email: ");
         var newEmail = Console.ReadLine();
+        Console.Write("Inserisci nuovo numero di telefono: ");
         var newPhone = Console.ReadLine();
 
-        bool trovato = false;
         var righe = File.ReadAllLines(folderPath).ToList();
 
         for (int i = 0; i < righe.Count; i++)
         {
             var colonne = righe[i].Split(',');
 
-            if (colonne.Length > 1 && colonne[2] == emailSearch)
+            if (colonne[2].Trim() == emailSearch)
             {
 
                 colonne[0] = newName;
@@ -60,11 +78,10 @@ switch (sceltaInt)
                 colonne[2] = newEmail;
                 colonne[3] = newPhone;
 
-                righe[i] = string.Join(",", colonne);
-                trovato = true;
+                righe[i] = string.Join(", ", colonne);
             }
         }
-        File.WriteAllLines(folderPath, righe);
+                File.WriteAllLines(folderPath, righe);
         break;
 
         case 3:
@@ -75,15 +92,13 @@ switch (sceltaInt)
         var s = Console.ReadLine();
         if (s == "s")
         {
-
-            bool trovato2 = false;
             var righe2 = File.ReadAllLines(folderPath).ToList();
 
             for (int i = 0; i < righe2.Count; i++) //cicla nel file
             {
                 var colonne2 = righe2[i].Split(',');
 
-                if (colonne2.Length > 1 && colonne2[2] == emailSearch2)
+                if (colonne2[2].Trim() == emailSearch2)
                 {
 
                     colonne2[0] = "";
@@ -92,7 +107,6 @@ switch (sceltaInt)
                     colonne2[3] = "";
 
                     righe2[i] = string.Join("", colonne2);
-                    trovato2 = true;
                 }
             }
             File.WriteAllLines(folderPath, righe2);
