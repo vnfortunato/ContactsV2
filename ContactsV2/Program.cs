@@ -17,15 +17,13 @@ while (sceltaInt > 5 || sceltaInt < 1)
 switch (sceltaInt)
 {
     case 1:
-        string[] array = { "Nome", "Cognome", "Email", "Telefono" };
+        string[] array = { "Nome", "Cognome", "Email", "Telefono\n" };
         string separator = ", ";
         string Array = string.Join(separator, array);
         bool fileExists = File.Exists(folderPath);
-        using (StreamWriter sw = new StreamWriter(folderPath, true))
-        {
             if (fileExists == false)
             {
-                sw.WriteLine(Array);
+            File.AppendAllText(folderPath, Array);
             }
             Console.Write("Inserisci nome: ");
             var nome = Console.ReadLine();
@@ -35,11 +33,10 @@ switch (sceltaInt)
             var email = Console.ReadLine();
             Console.Write("Inserisci telefono: ");
             var telefono = Console.ReadLine();
-            string[] Array2 = { nome, cognome, email, telefono };
+            string[] Array2 = { nome, cognome, email, telefono + "\n"};
             string Array3 = string.Join(separator, Array2);
-            sw.WriteLine(Array3);
+            File.AppendAllText(folderPath, Array3);
             break;
-        }
     case 2:
         Console.Write("Inserisci email contatto da modificare: ");
         var emailSearch = Console.ReadLine();
