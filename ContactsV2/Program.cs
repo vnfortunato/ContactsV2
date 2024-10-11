@@ -1,4 +1,6 @@
-﻿var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\File.csv";
+﻿using System.Text.RegularExpressions;
+
+var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\File.csv";
 var copyPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\";
 
 Console.WriteLine("1 - Aggiungi contatto");
@@ -53,69 +55,71 @@ switch (sceltaInt)
                 {
                     break;
                 }
+            }
+            Console.Write("Inserisci nuovo nome: ");
+            var newName = Console.ReadLine();
+            Console.Write("Inserisci nuovo cognome: ");
+            var newSurname = Console.ReadLine();
+            Console.Write("Inserisci nuova email: ");
+            var newEmail = Console.ReadLine();
+            Console.Write("Inserisci nuovo numero di telefono: ");
+            var newPhone = Console.ReadLine();
+
+            var righe = File.ReadAllLines(folderPath).ToList();
+
+            for (int i = 0; i < righe.Count; i++)
+            {
+                var colonne = righe[i].Split(',');
+
+                if (colonne[2].Trim() == emailSearch)
+                {
+
+                    colonne[0] = newName;
+                    colonne[1] = newSurname;
+                    colonne[2] = newEmail;
+                    colonne[3] = newPhone;
+
+                    righe[i] = string.Join(", ", colonne);
                 }
             }
-        Console.Write("Inserisci nuovo nome: ");
-        var newName = Console.ReadLine();
-        Console.Write("Inserisci nuovo cognome: ");
-        var newSurname = Console.ReadLine();
-        Console.Write("Inserisci nuova email: ");
-        var newEmail = Console.ReadLine();
-        Console.Write("Inserisci nuovo numero di telefono: ");
-        var newPhone = Console.ReadLine();
-
-        var righe = File.ReadAllLines(folderPath).ToList();
-
-        for (int i = 0; i < righe.Count; i++)
-        {
-            var colonne = righe[i].Split(',');
-
-            if (colonne[2].Trim() == emailSearch)
-            {
-
-                colonne[0] = newName;
-                colonne[1] = newSurname;
-                colonne[2] = newEmail;
-                colonne[3] = newPhone;
-
-                righe[i] = string.Join(", ", colonne);
-            }
+            File.WriteAllLines(folderPath, righe);
         }
-                File.WriteAllLines(folderPath, righe);
         break;
 
         case 3:
-
-        Console.WriteLine("Inserisci email dell'utente da eliminare");
-        var emailSearch2 = Console.ReadLine();
-        Console.WriteLine($"""Sei sicuro di voler eliminare l'utente "{emailSearch2}"? (s/n)""");
-        var s = Console.ReadLine();
-        if (s == "s")
+            Console.WriteLine("Inserisci email dell'utente da eliminare");
+                var emailSearch2 = Console.ReadLine();
+        var righe3 = File.ReadAllLines(folderPath).ToList();
+        for (int i = 0; i < righe3.Count; i++) //cicla nel file
         {
-            var righe2 = File.ReadAllLines(folderPath).ToList();
 
-            for (int i = 0; i < righe2.Count; i++) //cicla nel file
+            var colonne3 = righe3[i].Split(',');
+
+            if (colonne3[2].Trim() == emailSearch2)
             {
-                var colonne2 = righe2[i].Split(',');
-
-                if (colonne2[2].Trim() == emailSearch2)
+                Console.WriteLine($"""Sei sicuro di voler eliminare l'utente "{emailSearch2}"? (s/n)""");
+                var s = Console.ReadLine();
+                if (s == "s")
                 {
+                    var righe2 = File.ReadAllLines(folderPath).ToList();
 
-                    colonne2[0] = "";
-                    colonne2[1] = "";
-                    colonne2[2] = "";
-                    colonne2[3] = "";
+                            colonne2[0] = "";
+                            colonne2[1] = "";
+                            colonne2[2] = "";
+                            colonne2[3] = "";
 
-                    righe2[i] = string.Join("", colonne2);
+                            righe2[i] = string.Join("", colonne2);
+                        }
+                    }
+                    File.WriteAllLines(folderPath, righe2);
+                    var righeNonVuote = righe2.Where(riga2 => !string.IsNullOrWhiteSpace(riga2)).ToList();
+                    File.WriteAllLines(folderPath, righeNonVuote);
                 }
             }
-            File.WriteAllLines(folderPath, righe2);
-            var righeNonVuote = righe2.Where(riga2 => !string.IsNullOrWhiteSpace(riga2)).ToList();
-            File.WriteAllLines(folderPath, righeNonVuote);
-        }
-        else
-        {
-            Console.WriteLine("Operazione annullata");
+            else
+            {
+                Console.WriteLine("Email non trovata");
+            }
         }
         break;
     case 4:
