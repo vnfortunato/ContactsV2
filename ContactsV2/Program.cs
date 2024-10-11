@@ -45,7 +45,7 @@ switch (sceltaInt)
         Console.WriteLine("Inserisci email dell'utente da modificare");
         var emailSearch = Console.ReadLine();
         var righe = File.ReadAllLines(folderPath).ToList();
-        for (int i = 0; i < righe.Count; i++) //cicla nel file
+        for (int i = 0; i < righe.Count; i++)
         {
 
             var colonne = righe[i].Split(',');
@@ -81,12 +81,11 @@ switch (sceltaInt)
         break;
 
     case 3:
-        //ora
         emailTrovata = false;
         Console.WriteLine("Inserisci email dell'utente da eliminare");
         emailSearch = Console.ReadLine();
         righe = File.ReadAllLines(folderPath).ToList();
-        for (int i = 0; i < righe.Count; i++) //cicla nel file
+        for (int i = 0; i < righe.Count; i++)
         {
 
             var colonne = righe[i].Split(',');
