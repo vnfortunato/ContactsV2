@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\File.csv";
+﻿var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\File.csv";
 var copyPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\";
 
 Console.WriteLine("1 - Aggiungi contatto");
@@ -23,7 +21,7 @@ switch (sceltaInt)
         string separator = ", ";
         string Array = string.Join(separator, array);
         bool fileExists = File.Exists(folderPath);
-        if (fileExists == false)
+        if (!fileExists)
         {
             File.AppendAllText(folderPath, Array);
         }
@@ -74,7 +72,7 @@ switch (sceltaInt)
                 break;
             }
         }
-        if (emailTrovata == false)
+        if (!emailTrovata)
         {
             Console.WriteLine("Email non trovata");
         }
@@ -103,7 +101,7 @@ switch (sceltaInt)
                 }
             }
         }
-        if (emailTrovata == false)
+        if (!emailTrovata)
         {
             Console.WriteLine("Email non trovata");
         }
