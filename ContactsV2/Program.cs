@@ -97,17 +97,8 @@ switch (sceltaInt)
                 var EliminazioneUtente = Console.ReadLine();
                 if (EliminazioneUtente == "s")
                 {
-
-
-                    colonne[0] = "";
-                    colonne[1] = "";
-                    colonne[2] = "";
-                    colonne[3] = "";
-
-                    righe[i] = string.Join("", colonne);
+                    righe.RemoveAt(i);
                     File.WriteAllLines(folderPath, righe);
-                    var righeNonVuote = righe.Where(riga => !string.IsNullOrWhiteSpace(riga)).ToList();
-                    File.WriteAllLines(folderPath, righeNonVuote);
                     break;
                 }
             }
