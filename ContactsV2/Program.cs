@@ -7,10 +7,11 @@ Console.WriteLine("3 - Elimina contatto");
 Console.WriteLine("4 - Elimina rubrica");
 Console.WriteLine("5 - Esporta rubrica");
 Console.WriteLine("6 - Importa rubrica");
+Console.WriteLine("7 - Visualizza contatti");
 string sceltaString = Console.ReadLine();
 int sceltaInt;
 int.TryParse(sceltaString, out sceltaInt);
-while (sceltaInt > 6 || sceltaInt < 1)
+while (sceltaInt > 7 || sceltaInt < 1)
 {
     sceltaString = Console.ReadLine();
     int.TryParse(sceltaString, out sceltaInt);
@@ -56,7 +57,6 @@ switch (sceltaInt)
             File.AppendAllText(folderPath, Array3);
         }
         break;
-
     case 2:
         bool emailTrovata = false;
         Console.Write("Inserisci email dell'utente da modificare: ");
@@ -94,7 +94,6 @@ switch (sceltaInt)
             Console.WriteLine("Email non trovata");
         }
         break;
-
     case 3:
         emailTrovata = false;
         Console.Write("Inserisci email dell'utente da eliminare: ");
@@ -189,8 +188,17 @@ switch (sceltaInt)
                 }
             }
         }
+   
+    break;
+    case 7:
+        Console.WriteLine(File.ReadAllText(folderPath)); 
+        
         break;
 }
+    
+    
+
+
 
 
 
