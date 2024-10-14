@@ -5,11 +5,12 @@ Console.WriteLine("1 - Aggiungi contatto");
 Console.WriteLine("2 - Modifica contatto");
 Console.WriteLine("3 - Elimina contatto");
 Console.WriteLine("4 - Elimina rubrica");
-Console.WriteLine("5 - Esporta rubrica\n");
+Console.WriteLine("5 - Esporta rubrica");
+Console.WriteLine("6 - Importa rubrica");
 string sceltaString = Console.ReadLine();
 int sceltaInt;
 int.TryParse(sceltaString, out sceltaInt);
-while (sceltaInt > 5 || sceltaInt < 1)
+while (sceltaInt > 6 || sceltaInt < 1)
 {
     sceltaString = Console.ReadLine();
     int.TryParse(sceltaString, out sceltaInt);
@@ -127,6 +128,10 @@ switch (sceltaInt)
             File.Copy(folderPath, copyPath + fileCopy + ".csv");
         }
         break;
+    case 6:
+        {
+
+        }
 }
 
 
