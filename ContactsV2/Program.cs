@@ -47,14 +47,14 @@ switch (sceltaInt)
                 break;
             }
         }
-            if (!emailEsistente)
-            {
-                Console.Write("Inserisci numero di telefono: ");
-                var telefono = Console.ReadLine();
-                string[] Array2 = { nome, cognome, email, telefono + "\n" };
-                string Array3 = string.Join(separator, Array2);
-                File.AppendAllText(folderPath, Array3);
-            }
+        if (!emailEsistente)
+        {
+            Console.Write("Inserisci numero di telefono: ");
+            var telefono = Console.ReadLine();
+            string[] Array2 = { nome, cognome, email, telefono + "\n" };
+            string Array3 = string.Join(separator, Array2);
+            File.AppendAllText(folderPath, Array3);
+        }
         break;
 
     case 2:
@@ -110,7 +110,7 @@ switch (sceltaInt)
                 emailTrovata = true;
                 Console.WriteLine($"""Sei sicuro di voler eliminare l'utente "{emailSearch}"? (s/n)""");
                 var EliminazioneUtente = Console.ReadLine();
-                if (EliminazioneUtente == "s")
+                if (EliminazioneUtente.ToLower() == "s")
                 {
                     righe.RemoveAt(i);
                     File.WriteAllLines(folderPath, righe);
@@ -126,7 +126,7 @@ switch (sceltaInt)
     case 4:
         Console.WriteLine("Sei sicuro di voler eliminare la rubrica? (s/n)");
         var EliminazioneRubrica = Console.ReadLine();
-        if (EliminazioneRubrica == "s")
+        if (EliminazioneRubrica.ToLower() == "s")
         {
             Console.WriteLine("Rubrica eliminata");
             File.Delete(folderPath);
@@ -145,48 +145,54 @@ switch (sceltaInt)
         }
         break;
     case 6:
+        var searchFileImport = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\";
+        Console.Write("Inserisci nome file da importare: ");
+        var fileImport = searchFileImport + Console.ReadLine() + ".csv";
+
+
+        righe = File.ReadAllLines(folderPath).ToList();
+        var righeNuove = File.ReadAllLines(fileImport).ToList();
+
+        for (int y = 0; y < righeNuove.Count; y++)
         {
-            
-            var searchFileImport = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\";
-            Console.Write("Inserisci nome file da importare: ");
-            var fileImport = searchFileImport + Console.ReadLine() + ".csv";
+            var colonne = righeNuove[y].Split(',');
+            bool emailDuplicata = false;
 
-            righe = File.ReadAllLines(folderPath).ToList();
-            var righeNuove = File.ReadAllLines(fileImport).ToList();
+            for (int i = 0; i < righe.Count; i++)
+            {
+                var colonne2 = righe[i].Split(',');
 
-         for (int y = 0; y < righe.Count; y++) {
-                for (int i = 0; i < righeNuove.Count; i++)
+
+                if (colonne2[2].Trim() == colonne[2].Trim())
                 {
-                    var colonne = righe[i].Split(',');
-                    var colonne2 = righeNuove[i].Split(',');
-
-                    if (colonne[2].Trim() == righe[2])
+                    emailDuplicata = true;
+                    Console.WriteLine($"{colonne[2].Trim()} esiste già. Vuoi sostituirlo con {colonne2[0]},{colonne2[1]} ? (s/n)");
+                    var rispostaUtente = Console.ReadLine();
+                    if (rispostaUtente.ToLower() == "s")
                     {
-                        Console.WriteLine($"{righe[2]} esiste già. Vuoi sostituirlo con {colonne2[1]}, {colonne2[2]} ? (s/n)");
-                        var rispostaUtente = Console.ReadLine();
-                        if (rispostaUtente.ToLower() == "s")
-                        {
-                            righe.Remove(colonne[0] + colonne[1] + colonne[2] + colonne[3]);
-                            righeNuove.Add(colonne[0] + colonne[1] + colonne[2] + colonne[3]);
-                            File.WriteAllLines(folderPath, righeNuove);
-                            break;
-                        }
-                        else if (rispostaUtente.ToLower() == "n")
-                        {
-                            Console.WriteLine("Okay.");
-                            break;
-                        }
-                        
+                        righe.Remove(colonne[0] + colonne[1] + colonne[2] + colonne[3]);
+                        righeNuove.Add(colonne[0] + colonne[1] + colonne[2] + colonne[3]);
+                        File.WriteAllLines(folderPath, righeNuove);
+                        break;
                     }
+                    else if (rispostaUtente.ToLower() == "n")
+                    {
+                        Console.WriteLine("Okay.");
+                        break;
+                    }
+                    else if (!emailDuplicata)
+                    {
+                        File.AppendAllLines(folderPath, righeNuove);
+                        break;
+                    }
+
                 }
-                File.AppendAllLines(folderPath, righeNuove);
-                break;
             }
-
-
-            break;
         }
+        break;
 }
+
+
 
 
 
