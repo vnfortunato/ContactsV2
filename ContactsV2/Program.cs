@@ -194,17 +194,8 @@ switch (sceltaInt)
    
     break;
     case 7:
-        searchFileImport = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\";
-        Console.Write("Inserisci il nome della rubrica da visualizzare: ");
-        var nomeRubrica = searchFileImport + Console.ReadLine() + ".csv";
-        if (File.Exists(nomeRubrica))
-        {
-            Console.WriteLine("\n" + File.ReadAllText(nomeRubrica));
-        }
-        else
-        {
-            Console.WriteLine("\nRubrica non trovata");
-        }
+
+        Console.WriteLine("\n" + File.ReadAllText(folderPath)); 
         break;
 }
     
