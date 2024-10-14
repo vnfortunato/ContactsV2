@@ -51,19 +51,19 @@ switch (sceltaInt)
             if (colonne[2].Trim() == emailSearch)
             {
                 emailTrovata = true;
-                Console.Write("Inserisci nome: ");
-                nome = Console.ReadLine();
-                Console.Write("Inserisci cognome: ");
-                cognome = Console.ReadLine();
-                Console.Write("Inserisci email: ");
-                email = Console.ReadLine();
-                Console.Write("Inserisci numero di telefono: ");
-                telefono = Console.ReadLine();
+                Console.Write("Inserisci nuovo nome: ");
+                var nuovoNome = Console.ReadLine();
+                Console.Write("Inserisci nuovo cognome: ");
+                var nuovoCognome = Console.ReadLine();
+                Console.Write("Inserisci nuova email: ");
+                var nuovaEmail = Console.ReadLine();
+                Console.Write("Inserisci nuovo numero di telefono: ");
+                var nuovoTelefono = Console.ReadLine();
 
-                colonne[0] = nome;
-                colonne[1] = cognome;
-                colonne[2] = email;
-                colonne[3] = telefono;
+                colonne[0] = nuovoNome;
+                colonne[1] = nuovoCognome;
+                colonne[2] = nuovaEmail;
+                colonne[3] = nuovoTelefono;
 
                 righe[i] = string.Join(", ", colonne);
                 File.WriteAllLines(folderPath, righe);
