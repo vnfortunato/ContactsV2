@@ -32,18 +32,36 @@ switch (sceltaInt)
         var cognome = Console.ReadLine();
         Console.Write("Inserisci email: ");
         var email = Console.ReadLine();
-        Console.Write("Inserisci numero di telefono: ");
-        var telefono = Console.ReadLine();
-        string[] Array2 = { nome, cognome, email, telefono + "\n" };
-        string Array3 = string.Join(separator, Array2);
-        File.AppendAllText(folderPath, Array3);
+        var righe = File.ReadAllLines(folderPath).ToList();
+        bool emailEsistente = false;
+        for (int i = 0; i < righe.Count; i++)
+
+        {
+            var colonne = righe[i].Split(',');
+
+
+            if (colonne[2].Trim() == email)
+            {
+                Console.WriteLine("\nContatto già esistente");
+                emailEsistente = true;
+                break;
+            }
+        }
+            if (!emailEsistente)
+            {
+                Console.Write("Inserisci numero di telefono: ");
+                var telefono = Console.ReadLine();
+                string[] Array2 = { nome, cognome, email, telefono + "\n" };
+                string Array3 = string.Join(separator, Array2);
+                File.AppendAllText(folderPath, Array3);
+            }
         break;
 
     case 2:
         bool emailTrovata = false;
         Console.Write("Inserisci email dell'utente da modificare: ");
         var emailSearch = Console.ReadLine();
-        var righe = File.ReadAllLines(folderPath).ToList();
+        righe = File.ReadAllLines(folderPath).ToList();
         for (int i = 0; i < righe.Count; i++)
         {
 
@@ -130,7 +148,8 @@ switch (sceltaInt)
         break;
     case 6:
         {
-
+            //var searcFileImport = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\.csv";
+            break;
         }
 }
 
