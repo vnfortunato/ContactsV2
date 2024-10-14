@@ -86,8 +86,6 @@ switch (sceltaInt)
 
                 righe[i] = string.Join(", ", colonne);
                 File.WriteAllLines(folderPath, righe);
-                var righeNonVuote = righe.Where(riga => !string.IsNullOrWhiteSpace(riga)).ToList();
-                File.WriteAllLines(folderPath, righeNonVuote);
                 break;
             }
         }
@@ -148,7 +146,44 @@ switch (sceltaInt)
         break;
     case 6:
         {
-            //var searcFileImport = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\.csv";
+            
+            var searchFileImport = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\";
+            Console.Write("Inserisci nome file da importare: ");
+            var fileImport = searchFileImport + Console.ReadLine() + ".csv";
+
+            righe = File.ReadAllLines(folderPath).ToList();
+            var righeNuove = File.ReadAllLines(fileImport).ToList();
+
+         for (int y = 0; y < righe.Count; y++) {
+                for (int i = 0; i < righeNuove.Count; i++)
+                {
+                    var colonne = righe[i].Split(',');
+                    var colonne2 = righeNuove[i].Split(',');
+
+                    if (colonne[2].Trim() == righe[2])
+                    {
+                        Console.WriteLine($"{righe[2]} esiste già. Vuoi sostituirlo con {colonne2[1]}, {colonne2[2]} ? (s/n)");
+                        var rispostaUtente = Console.ReadLine();
+                        if (rispostaUtente.ToLower() == "s")
+                        {
+                            righe.Remove(colonne[0] + colonne[1] + colonne[2] + colonne[3]);
+                            righeNuove.Add(colonne[0] + colonne[1] + colonne[2] + colonne[3]);
+                            File.WriteAllLines(folderPath, righeNuove);
+                            break;
+                        }
+                        else if (rispostaUtente.ToLower() == "n")
+                        {
+                            Console.WriteLine("Okay.");
+                            break;
+                        }
+                        
+                    }
+                }
+                File.AppendAllLines(folderPath, righeNuove);
+                break;
+            }
+
+
             break;
         }
 }
