@@ -7,7 +7,7 @@ Console.WriteLine("3 - Elimina contatto");
 Console.WriteLine("4 - Elimina rubrica");
 Console.WriteLine("5 - Esporta rubrica");
 Console.WriteLine("6 - Importa rubrica");
-Console.WriteLine("7 - Visualizza contatti");
+Console.WriteLine("7 - Visualizza contatti\n");
 string sceltaString = Console.ReadLine();
 int sceltaInt;
 int.TryParse(sceltaString, out sceltaInt);
@@ -55,6 +55,7 @@ switch (sceltaInt)
             string[] Array2 = { nome, cognome, email, telefono + "\n" };
             string Array3 = string.Join(separator, Array2);
             File.AppendAllText(folderPath, Array3);
+            Console.WriteLine("\nContatto aggiunto correttamente");
         }
         break;
     case 2:
@@ -86,6 +87,7 @@ switch (sceltaInt)
 
                 righe[i] = string.Join(", ", colonne);
                 File.WriteAllLines(folderPath, righe);
+                Console.WriteLine("\nContatto modificato correttamente");
                 break;
             }
         }
@@ -113,6 +115,7 @@ switch (sceltaInt)
                 {
                     righe.RemoveAt(i);
                     File.WriteAllLines(folderPath, righe);
+                    Console.WriteLine("\nContatto eliminato correttamente");
                     break;
                 }
             }
@@ -127,7 +130,7 @@ switch (sceltaInt)
         var EliminazioneRubrica = Console.ReadLine();
         if (EliminazioneRubrica.ToLower() == "s")
         {
-            Console.WriteLine("Rubrica eliminata");
+            Console.WriteLine("\nRubrica eliminata correttamente");
             File.Delete(folderPath);
 
         }
@@ -191,8 +194,17 @@ switch (sceltaInt)
    
     break;
     case 7:
-        Console.WriteLine(File.ReadAllText(folderPath)); 
-        
+        searchFileImport = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\";
+        Console.Write("Inserisci il nome della rubrica da visualizzare: ");
+        var nomeRubrica = searchFileImport + Console.ReadLine() + ".csv";
+        if (File.Exists(nomeRubrica))
+        {
+            Console.WriteLine("\n" + File.ReadAllText(nomeRubrica));
+        }
+        else
+        {
+            Console.WriteLine("\nRubrica non trovata");
+        }
         break;
 }
     
