@@ -1,5 +1,5 @@
-﻿var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\File.csv";
-var copyPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\";
+﻿string filePath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\File.csv";
+string copyPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Desktop\";
 
 Console.WriteLine("1 - Aggiungi contatto");
 Console.WriteLine("2 - Modifica contatto");
@@ -8,40 +8,41 @@ Console.WriteLine("4 - Elimina rubrica");
 Console.WriteLine("5 - Esporta rubrica");
 Console.WriteLine("6 - Importa rubrica");
 Console.WriteLine("7 - Visualizza contatti\n");
-string sceltaString = Console.ReadLine();
+string ?sceltaString = Console.ReadLine();
 int sceltaInt;
 int.TryParse(sceltaString, out sceltaInt);
 while (sceltaInt > 7 || sceltaInt < 1)
 {
     sceltaString = Console.ReadLine();
     int.TryParse(sceltaString, out sceltaInt);
+
 }
 switch (sceltaInt)
 {
     case 1:
-        string[] array = { "Nome", "Cognome", "Email", "Telefono\n" };
-        string separator = ", ";
-        string Array = string.Join(separator, array);
-        bool fileExists = File.Exists(folderPath);
+        //string[] array = { "Nome", "Cognome", "Email", "Telefono\n" };
+        //string separator = ", ";
+        //string Array = string.Join(separator, array);
+        bool fileExists = File.Exists(filePath);
         if (!fileExists)
         {
-            File.AppendAllText(folderPath, Array);
+            File.AppendAllText(filePath, "Nome, Cognome, Email, Telefono\n");
         }
         Console.Write("Inserisci nome: ");
-        var nome = Console.ReadLine();
+        string? nome = Console.ReadLine();
         Console.Write("Inserisci cognome: ");
-        var cognome = Console.ReadLine();
+        string? cognome = Console.ReadLine();
         Console.Write("Inserisci email: ");
-        var email = Console.ReadLine();
-        var righe = File.ReadAllLines(folderPath).ToList();
+        string? email = Console.ReadLine();
+        var letturaFile = File.ReadAllLines(filePath).ToList();
         bool emailEsistente = false;
-        for (int i = 0; i < righe.Count; i++)
+        for (int i = 0; i < letturaFile.Count; i++)
 
         {
-            var colonne = righe[i].Split(',');
+            var righe = letturaFile[i].Split(',');
 
 
-            if (colonne[2].Trim() == email)
+            if (righe[2].Contains(email))
             {
                 Console.WriteLine("\nContatto già esistente");
                 emailEsistente = true;
@@ -51,10 +52,12 @@ switch (sceltaInt)
         if (!emailEsistente)
         {
             Console.Write("Inserisci numero di telefono: ");
-            var telefono = Console.ReadLine();
-            string[] Array2 = { nome, cognome, email, telefono + "\n" };
-            string Array3 = string.Join(separator, Array2);
-            File.AppendAllText(folderPath, Array3);
+            string? telefonoString = Console.ReadLine();
+            int telefonoInt = Convert.ToInt32(telefonoString);
+
+            var utente = new Rubrica() { Nome = nome, Cognome = cognome, Email = email, Telefono = telefonoInt };
+            string contatto = utente.Nome + ", " + utente.Cognome + ", " + utente.Email + ", " + utente.Telefono + "\n";
+            File.AppendAllText(filePath, contatto);
             Console.WriteLine("\nContatto aggiunto correttamente");
         }
         break;
@@ -62,31 +65,31 @@ switch (sceltaInt)
         bool emailTrovata = false;
         Console.Write("Inserisci email dell'utente da modificare: ");
         var emailSearch = Console.ReadLine();
-        righe = File.ReadAllLines(folderPath).ToList();
-        for (int i = 0; i < righe.Count; i++)
+        letturaFile = File.ReadAllLines(filePath).ToList();
+        for (int i = 0; i < letturaFile.Count; i++)
         {
 
-            var colonne = righe[i].Split(',');
+            string?[] colonne = letturaFile[i].Split(',');
 
-            if (colonne[2].Trim() == emailSearch)
+            if (colonne[2].Trim() != emailSearch)
             {
                 emailTrovata = true;
                 Console.Write("Inserisci nuovo nome: ");
-                var nuovoNome = Console.ReadLine();
+                string? nuovoNome = Console.ReadLine();
                 Console.Write("Inserisci nuovo cognome: ");
-                var nuovoCognome = Console.ReadLine();
+                string? nuovoCognome = Console.ReadLine();
                 Console.Write("Inserisci nuova email: ");
-                var nuovaEmail = Console.ReadLine();
+                string? nuovaEmail = Console.ReadLine();
                 Console.Write("Inserisci nuovo numero di telefono: ");
-                var nuovoTelefono = Console.ReadLine();
+                string? nuovoTelefono = Console.ReadLine();
 
                 colonne[0] = nuovoNome;
                 colonne[1] = nuovoCognome;
                 colonne[2] = nuovaEmail;
                 colonne[3] = nuovoTelefono;
 
-                righe[i] = string.Join(", ", colonne);
-                File.WriteAllLines(folderPath, righe);
+                letturaFile[i] = string.Join(", ", colonne);
+                File.WriteAllLines(filePath, letturaFile);
                 Console.WriteLine("\nContatto modificato correttamente");
                 break;
             }
@@ -100,21 +103,21 @@ switch (sceltaInt)
         emailTrovata = false;
         Console.Write("Inserisci email dell'utente da eliminare: ");
         emailSearch = Console.ReadLine();
-        righe = File.ReadAllLines(folderPath).ToList();
-        for (int i = 0; i < righe.Count; i++)
+        letturaFile = File.ReadAllLines(filePath).ToList();
+        for (int i = 0; i < letturaFile.Count; i++)
         {
 
-            var colonne = righe[i].Split(',');
+            var colonne = letturaFile[i].Split(',');
 
             if (colonne[2].Trim() == emailSearch)
             {
                 emailTrovata = true;
                 Console.WriteLine($"""Sei sicuro di voler eliminare l'utente "{emailSearch}"? (s/n)""");
-                var EliminazioneUtente = Console.ReadLine();
+                string? EliminazioneUtente = Console.ReadLine();
                 if (EliminazioneUtente.ToLower() == "s")
                 {
-                    righe.RemoveAt(i);
-                    File.WriteAllLines(folderPath, righe);
+                    letturaFile.RemoveAt(i);
+                    File.WriteAllLines(filePath, letturaFile);
                     Console.WriteLine("\nContatto eliminato correttamente");
                     break;
                 }
@@ -127,11 +130,11 @@ switch (sceltaInt)
         break;
     case 4:
         Console.WriteLine("Sei sicuro di voler eliminare la rubrica? (s/n)");
-        var EliminazioneRubrica = Console.ReadLine();
-        if (EliminazioneRubrica.ToLower() == "s")
+        string? EliminazioneRubrica = Console.ReadLine();
+        if (EliminazioneRubrica.Equals("s", StringComparison.CurrentCultureIgnoreCase))
         {
             Console.WriteLine("\nRubrica eliminata correttamente");
-            File.Delete(folderPath);
+            File.Delete(filePath);
 
         }
         else
@@ -143,7 +146,7 @@ switch (sceltaInt)
         {
             Console.WriteLine("Inserisci nome nuovo registro");
             var fileCopy = Console.ReadLine();
-            File.Copy(folderPath, copyPath + fileCopy + ".csv");
+            File.Copy(filePath, copyPath + fileCopy + ".csv");
         }
         break;
     case 6:
@@ -152,7 +155,7 @@ switch (sceltaInt)
         var fileImport = searchFileImport + Console.ReadLine() + ".csv";
 
 
-        righe = File.ReadAllLines(folderPath).ToList();
+        letturaFile = File.ReadAllLines(filePath).ToList();
         var righeNuove = File.ReadAllLines(fileImport).ToList();
 
         for (int y = 0; y < righeNuove.Count; y++)
@@ -160,9 +163,9 @@ switch (sceltaInt)
             var colonne = righeNuove[y].Split(',');
             bool emailDuplicata = false;
 
-            for (int i = 0; i < righe.Count; i++)
+            for (int i = 0; i < letturaFile.Count; i++)
             {
-                var colonne2 = righe[i].Split(',');
+                var colonne2 = letturaFile[i].Split(',');
 
 
                 if (colonne2[2].Trim() == colonne[2].Trim())
@@ -172,9 +175,9 @@ switch (sceltaInt)
                     var rispostaUtente = Console.ReadLine();
                     if (rispostaUtente.ToLower() == "s")
                     {
-                        righe.Remove(colonne[0] + colonne[1] + colonne[2] + colonne[3]);
+                        letturaFile.Remove(colonne[0] + colonne[1] + colonne[2] + colonne[3]);
                         righeNuove.Add(colonne[0] + colonne[1] + colonne[2] + colonne[3]);
-                        File.WriteAllLines(folderPath, righeNuove);
+                        File.WriteAllLines(filePath, righeNuove);
                         break;
                     }
                     else if (rispostaUtente.ToLower() == "n")
@@ -184,7 +187,7 @@ switch (sceltaInt)
                     }
                     else if (!emailDuplicata)
                     {
-                        File.AppendAllLines(folderPath, righeNuove);
+                        File.AppendAllLines(filePath, righeNuove);
                         break;
                     }
 
@@ -195,7 +198,7 @@ switch (sceltaInt)
     break;
     case 7:
 
-        Console.WriteLine("\n" + File.ReadAllText(folderPath)); 
+        Console.WriteLine("\n" + File.ReadAllText(filePath)); 
         break;
 }
     
